@@ -4,6 +4,9 @@ from models.mahasiswa_model import (
         get_mahasiswa_paginated,
         get_tahun_masuk
 )
+
+from models.judul_ta_model import get_judul_ta_by_nim
+
 from flask import jsonify, request
 
 def all_mahasiswa_join():
@@ -16,27 +19,41 @@ def all_mahasiswa_join():
     })
 
 def detail_mahasiswa(nim):
-    data = get_mahasiswa_by_nim(nim)
+    mahasiswa = get_mahasiswa_by_nim(nim)
 
-    if not data:
+    if not mahasiswa:
         return jsonify({
             "status": "error",
             "message": "Mahasiswa tidak ditemukan"
         }), 404
 
+    ta_list = get_judul_ta_by_nim(nim)
+
     return jsonify({
         "status": "success",
-        "data": data
+        "data": {
+            "mahasiswa": mahasiswa,
+            "judul_ta": ta_list
+        }
     })
 
 def mahasiswa_paginated():
-    page = int(request.args.get("page", 1))
-    limit = int(request.args.get("limit", 20))
+    try:
+        page = int(request.args.get("page", 1))
+        limit = int(request.args.get("limit", 20))
+    except calueError:
+        return jsonify({
+            "status": "error",
+            "message": "Invalid page or limit parameter"
+        }), 400
+
     search = request.args.get("search", "")
     tahun_masuk = request.args.get("tahun_masuk", "")
     sort = request.args.get("sort", "asc")  # asc / desc
 
-    data, total_pages = get_mahasiswa_paginated(page, limit, search, tahun_masuk, sort)
+    data, total_pages = get_mahasiswa_paginated (
+            page, limit, search, tahun_masuk, sort
+    )
 
     return jsonify({
         "status": "success",
