@@ -41,7 +41,7 @@ def mahasiswa_paginated():
     try:
         page = int(request.args.get("page", 1))
         limit = int(request.args.get("limit", 20))
-    except calueError:
+    except valueError:
         return jsonify({
             "status": "error",
             "message": "Invalid page or limit parameter"

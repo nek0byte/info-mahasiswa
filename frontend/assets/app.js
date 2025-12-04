@@ -85,7 +85,11 @@ function renderData(data) {
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-xl font-bold">${item.nama || "-"}</p>
-                    <p class="text-neutral-400">${item.nim || "-"}</p>
+                   
+                   <a heref="detail.html?nim=${item.nim}" 
+                   class="text-neutral-400 underline hover:text-neutral-200">
+                   ${item.nim || "-"}</a>
+
                 </div>
                 <span class="text-neutral-300">${item.tahun_masuk || "-"}</span>
             </div>
