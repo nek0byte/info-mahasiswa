@@ -15,7 +15,7 @@ const emptyState = document.getElementById('emptyState');
 const statsSection = document.getElementById('statsSection');
 const totalTA = document.getElementById('totalTA');
 const countSelesai = document.getElementById('countSelesai');
-const countProses = document.getElementById('countProses');
+const countProses = document.getElementnById('countProses');
 const countTotal = document.getElementById('countTotal');
 
 // Status configuration
