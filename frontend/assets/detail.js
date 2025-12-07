@@ -1,51 +1,209 @@
+// Configuration
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api/mahasiswa' 
+    : '/api/mahasiswa';
+
+// Get NIM from URL
 const urlParams = new URLSearchParams(window.location.search);
-const nim = urlParams.get("nim");
+const nim = urlParams.get('nim');
 
-async function loadDetail() {
-    const res = await fetch(`http://localhost:5000/api/mahasiswa/${nim}`);
-    const json = await res.json();
+// DOM Elements
+const loadingState = document.getElementById('loadingState');
+const profileContent = document.getElementById('profileContent');
+const errorState = document.getElementById('errorState');
+const errorMessage = document.getElementById('errorMessage');
 
-    if (json.status !== "success") {
-        document.querySelector(".title").innerText = "Mahasiswa tidak ditemukan.";
+// Profile elements
+const studentInitial = document.getElementById('studentInitial');
+const studentName = document.getElementById('studentName');
+const studentNIM = document.getElementById('studentNIM');
+const studentYear = document.getElementById('studentYear');
+const viewThesisBtn = document.getElementById('viewThesisBtn');
+const editProfileBtn = document.getElementById('editProfileBtn');
+const thesisLink = document.getElementById('thesisLink');
+const viewAllThesis = document.getElementById('viewAllThesis');
+
+// Info elements
+const infoName = document.getElementById('infoName');
+const infoNIM = document.getElementById('infoNIM');
+const infoYear = document.getElementById('infoYear');
+const infoSchool = document.getElementById('infoSchool');
+const infoSchoolCode = document.getElementById('infoSchoolCode');
+const infoThesisCount = document.getElementById('infoThesisCount');
+
+// Additional info
+const infoCreated = document.getElementById('infoCreated');
+const infoUpdated = document.getElementById('infoUpdated');
+const infoRecordID = document.getElementById('infoRecordID');
+
+// Thesis container
+const thesisContainer = document.getElementById('thesisContainer');
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    if (!nim) {
+        showError('No student ID specified in URL.');
         return;
     }
+    loadStudentProfile();
+});
 
-    const data = json.data.mahasiswa;
-
-    document.querySelector(".title").innerText = `${data.nama} (${data.nim})`;
-
-    document.querySelector("#detail-body").innerHTML = `
-        <p><strong>NIM:</strong> ${data.nim}</p>
-        <p><strong>Nama:</strong> ${data.nama}</p>
-        <p><strong>Tahun Masuk:</strong> ${data.tahun_masuk}</p>
-        <p><strong>Sekolah Asal:</strong> ${data.nama_sekolah}</p>
-        <p><strong>Kode Sekolah:</strong> ${data.kode_sekolah}</p>
-        <p><strong>Alamat:</strong> ${data.alamat || '-'}</p>
-    `;
-
-    renderTA(json.data.judul_ta);
+// Load student profile
+async function loadStudentProfile() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/${nim}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            renderProfile(data.data);
+        } else {
+            showError(data.message || 'Failed to load student profile.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Failed to connect to server. Please check if the server is running.');
+    }
 }
 
-function renderTA(list) {
-    const tbody = document.querySelector("#ta-table tbody");
-    tbody.innerHTML = "";
+// Render profile data
+function renderProfile(data) {
+    const student = data.mahasiswa;
+    const thesisList = data.judul_ta || [];
+    
+    // Hide loading, show content
+    loadingState.style.display = 'none';
+    profileContent.classList.remove('hidden');
+    
+    // Set basic info
+    const firstName = student.nama ? student.nama.split(' ')[0] : '';
+    studentInitial.textContent = student.nama ? student.nama.charAt(0).toUpperCase() : '?';
+    studentName.textContent = student.nama || 'Unknown Student';
+    studentNIM.textContent = `NIM: ${student.nim || 'N/A'}`;
+    studentYear.textContent = `Year: ${student.tahun_masuk || 'N/A'}`;
+    
+    // Update info cards
+    infoName.textContent = student.nama || '-';
+    infoNIM.textContent = student.nim || '-';
+    infoYear.textContent = student.tahun_masuk || '-';
+    infoSchool.textContent = student.nama_sekolah || 'Not specified';
+    infoSchoolCode.textContent = student.kode_sekolah || '-';
+    infoThesisCount.textContent = thesisList.length;
+    
+    // Set dates
+    const now = new Date();
+    infoCreated.textContent = now.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    infoUpdated.textContent = 'Just now';
+    infoRecordID.textContent = student.nim || '-';
+    
+    // Update links
+    viewThesisBtn.href = `ta.html?nim=${student.nim}`;
+    editProfileBtn.href = `#`;
+    thesisLink.href = `ta.html?nim=${student.nim}`;
+    viewAllThesis.href = `ta.html?nim=${student.nim}`;
+    
+    // Render thesis preview
+    renderThesisPreview(thesisList);
+}
 
-    if (!list || list.length === 0) { 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="2" class="text-center text-neutral-500">Tidak ada data Tugas Akhir.</td>
+// Render thesis preview
+function renderThesisPreview(thesisList) {
+    if (!thesisList || thesisList.length === 0) {
+        thesisContainer.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-gray-400 mb-3">
+                    <i class="fas fa-book-open text-4xl"></i>
+                </div>
+                <h4 class="text-lg font-medium text-gray-700 mb-2">No Thesis Found</h4>
+                <p class="text-gray-600">This student hasn't registered any thesis titles yet.</p>
+            </div>
         `;
         return;
     }
-
-    list.forEach(t => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${t.judul}</td>
-                <td>${t.tahun}</td>
-            </tr>
+    
+    // Show only first 3 theses
+    const previewTheses = thesisList.slice(0, 3);
+    
+    let thesisHTML = '';
+    
+    if (thesisList.length > 3) {
+        thesisHTML += `
+            <div class="mb-4 p-3 bg-blue-50 rounded-lg text-sm text-blue-700">
+                <i class="fas fa-info-circle mr-2"></i>
+                Showing 3 of ${thesisList.length} thesis titles. 
+                <a href="ta.html?nim=${nim}" class="font-medium underline">View all</a>
+            </div>
+        `;
+    }
+    
+    thesisHTML += '<div class="space-y-4">';
+    
+    previewTheses.forEach((thesis, index) => {
+        const status = thesis.status || 'Unknown';
+        let statusClass = 'bg-gray-100 text-gray-800';
+        
+        if (status === 'Selesai') statusClass = 'bg-green-100 text-green-800';
+        else if (status === 'Proses') statusClass = 'bg-yellow-100 text-yellow-800';
+        
+        thesisHTML += `
+            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900 mb-1">${thesis.judul || 'Untitled Thesis'}</h4>
+                        <div class="flex items-center text-sm text-gray-600 space-x-4">
+                            <span><i class="far fa-calendar mr-1"></i> ${thesis.tahun_masuk || 'N/A'}</span>
+                            <span class="${statusClass} px-2 py-1 rounded-full text-xs">
+                                ${status}
+                            </span>
+                        </div>
+                        ${thesis.deskripsi ? `
+                            <p class="text-sm text-gray-700 mt-2 line-clamp-2">${thesis.deskripsi}</p>
+                        ` : ''}
+                    </div>
+                    <a href="ta.html?nim=${nim}#thesis-${thesis.id_ta}" 
+                       class="ml-4 text-blue-600 hover:text-blue-800">
+                       <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
         `;
     });
+    
+    thesisHTML += '</div>';
+    thesisContainer.innerHTML = thesisHTML;
 }
 
-loadDetail();
+// Show error state
+function showError(message) {
+    loadingState.style.display = 'none';
+    errorState.classList.remove('hidden');
+    errorMessage.textContent = message;
+}
+
+// Print profile function
+function printProfile() {
+    alert('Print feature coming soon!');
+    // Implement print functionality here
+}
+
+// Share profile function
+function shareProfile() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Student Profile',
+            text: `Check out ${studentName.textContent}'s profile`,
+            url: window.location.href,
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Profile link copied to clipboard!');
+    }
+}

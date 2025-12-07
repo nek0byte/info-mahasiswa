@@ -48,13 +48,27 @@ def get_mahasiswa_by_nim(nim):
     db.close()
     return result
 
-def get_mahasiswa_paginated(page=1, limit=20, search="", tahun_masuk="", order="asc"):
+def get_mahasiswa_paginated(page=1, limit=20, search="", tahun_masuk="", sort_by="tahun_masuk", order="asc"):
     db = get_db()
     cur = db.cursor(dictionary=True)
     
     offset = (page - 1) * limit
+    
+    # Validate sort_by parameter to prevent SQL injection
+    valid_sort_columns = ['tahun_masuk', 'nama', 'nim']
+    if sort_by not in valid_sort_columns:
+        sort_by = 'tahun_masuk'
+    
+    # Validate order parameter
+    if order not in ['asc', 'desc']:
+        order = 'asc'
+    
     query = """
-        SELECT m.*, s.nama_sekolah, s.kode_sekolah 
+        SELECT 
+            m.*, 
+            s.nama_sekolah, 
+            s.kode_sekolah,
+            (SELECT COUNT(*) FROM judul_ta WHERE nim = m.nim) as jumlah_ta
         FROM mahasiswa m 
         LEFT JOIN sekolah_asal s ON m.id_sekolah = s.kode_sekolah 
         WHERE 1=1
@@ -69,7 +83,7 @@ def get_mahasiswa_paginated(page=1, limit=20, search="", tahun_masuk="", order="
         query += " AND m.tahun_masuk = %s"
         params.append(tahun_masuk)
 
-    query += f" ORDER BY m.tahun_masuk {order}"
+    query += f" ORDER BY m.{sort_by} {order}"
     query += " LIMIT %s OFFSET %s"
     params.extend([limit, offset])
 
@@ -96,7 +110,6 @@ def get_mahasiswa_paginated(page=1, limit=20, search="", tahun_masuk="", order="
     db.close()
 
     return data, total_pages
-
 def get_tahun_masuk():
     db = get_db()
     cur = db.cursor()

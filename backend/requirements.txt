@@ -1,2 +1,4 @@
 Flask
-flask-mysql
+flask-cors
+mysql-conector-python
+python-dotenv
