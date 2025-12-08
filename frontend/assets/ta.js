@@ -15,31 +15,31 @@ const emptyState = document.getElementById('emptyState');
 const statsSection = document.getElementById('statsSection');
 const totalTA = document.getElementById('totalTA');
 const countSelesai = document.getElementById('countSelesai');
-const countProses = document.getElementnById('countProses');
+const countProses = document.getElementById('countProses'); // FIXED TYPO
 const countTotal = document.getElementById('countTotal');
 
-// Status configuration
+// Status configuration - BLACK THEME
 const statusConfig = {
     'Selesai': { 
-        color: 'bg-green-100 text-green-800', 
+        color: 'bg-green-900 text-green-300 border border-green-700', 
         icon: 'fas fa-check-circle', 
         text: 'Completed',
         badge: 'success'
     },
     'Proses': { 
-        color: 'bg-yellow-100 text-yellow-800', 
+        color: 'bg-yellow-900 text-yellow-300 border border-yellow-700', 
         icon: 'fas fa-clock', 
         text: 'In Progress',
         badge: 'warning'
     },
     'Batal': { 
-        color: 'bg-red-100 text-red-800', 
+        color: 'bg-red-900 text-red-300 border border-red-700', 
         icon: 'fas fa-times-circle', 
         text: 'Cancelled',
         badge: 'error'
     },
     'default': { 
-        color: 'bg-gray-100 text-gray-800', 
+        color: 'bg-gray-700 text-gray-300 border border-gray-600', 
         icon: 'fas fa-question-circle', 
         text: 'Unknown',
         badge: 'default'
@@ -84,18 +84,18 @@ function renderStudentInfo(student) {
     studentCard.innerHTML = `
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900">${student.nama}</h2>
+                <h2 class="text-2xl font-bold text-white">${student.nama}</h2>
                 <div class="flex items-center mt-2 space-x-4">
-                    <div class="flex items-center text-gray-600">
+                    <div class="flex items-center text-gray-300">
                         <i class="fas fa-id-card mr-2"></i>
                         <span class="font-medium">${student.nim}</span>
                     </div>
-                    <div class="flex items-center text-gray-600">
+                    <div class="flex items-center text-gray-300">
                         <i class="fas fa-calendar-alt mr-2"></i>
                         <span>Entry Year: ${student.tahun_masuk}</span>
                     </div>
                     ${student.nama_sekolah ? `
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center text-gray-300">
                             <i class="fas fa-school mr-2"></i>
                             <span>${student.nama_sekolah}</span>
                         </div>
@@ -104,11 +104,11 @@ function renderStudentInfo(student) {
             </div>
             <div class="flex items-center space-x-3">
                 <a href="detail.html?nim=${student.nim}" 
-                   class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                   class="px-4 py-2 bg-gray-900 hover:bg-black text-white rounded-lg border border-gray-700">
                    <i class="fas fa-user-circle mr-2"></i> View Profile
                 </a>
                 <a href="index.html" 
-                   class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">
+                   class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">
                    <i class="fas fa-arrow-left mr-2"></i> Back
                 </a>
             </div>
@@ -135,7 +135,7 @@ function renderThesisList(thesisList) {
         const statusInfo = statusConfig[status] || statusConfig.default;
         
         const row = document.createElement('tr');
-        row.className = `hover:bg-gray-50 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`;
+        row.className = `hover:bg-gray-700 transition ${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-850'}`;
         
         row.innerHTML = `
             <td class="px-6 py-4">
@@ -144,14 +144,14 @@ function renderThesisList(thesisList) {
                         <i class="${statusInfo.icon}"></i>
                     </div>
                     <div>
-                        <div class="text-sm font-medium text-gray-900">${thesis.judul}</div>
+                        <div class="text-sm font-medium text-white">${thesis.judul}</div>
                         <div class="text-xs text-gray-500 mt-1">ID: ${thesis.id_ta}</div>
                     </div>
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">
-                    ${thesis.tahun_masuk || '<span class="text-gray-400">-</span>'}
+                <div class="text-sm text-gray-300">
+                    ${thesis.tahun_masuk || '<span class="text-gray-500">-</span>'}
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
@@ -161,9 +161,9 @@ function renderThesisList(thesisList) {
                 </span>
             </td>
             <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 max-w-xs">
+                <div class="text-sm text-gray-300 max-w-xs">
                     ${thesis.deskripsi || 
-                        `<span class="text-gray-400 italic">No description available</span>`
+                        `<span class="text-gray-500 italic">No description available</span>`
                     }
                 </div>
             </td>
@@ -202,17 +202,17 @@ function showError(message) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'col-span-full';
     errorDiv.innerHTML = `
-        <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
-            <div class="text-red-500 mb-4">
+        <div class="bg-red-900 border border-red-700 rounded-xl p-8 text-center">
+            <div class="text-red-400 mb-4">
                 <i class="fas fa-exclamation-triangle text-4xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-red-800 mb-2">Error</h3>
-            <p class="text-red-700 mb-6">${message}</p>
+            <h3 class="text-xl font-semibold text-red-200 mb-2">Error</h3>
+            <p class="text-red-300 mb-6">${message}</p>
             <div class="space-x-4">
-                <a href="index.html" class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <a href="index.html" class="px-5 py-2 bg-gray-800 text-white rounded-lg hover:bg-black border border-gray-700">
                     <i class="fas fa-home mr-2"></i> Back to Directory
                 </a>
-                <button onclick="location.reload()" class="px-5 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                <button onclick="location.reload()" class="px-5 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">
                     <i class="fas fa-redo mr-2"></i> Try Again
                 </button>
             </div>

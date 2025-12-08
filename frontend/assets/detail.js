@@ -114,16 +114,16 @@ function renderProfile(data) {
     renderThesisPreview(thesisList);
 }
 
-// Render thesis preview
+// Render thesis preview - BLACK THEME
 function renderThesisPreview(thesisList) {
     if (!thesisList || thesisList.length === 0) {
         thesisContainer.innerHTML = `
             <div class="text-center py-8">
-                <div class="text-gray-400 mb-3">
+                <div class="text-gray-500 mb-3">
                     <i class="fas fa-book-open text-4xl"></i>
                 </div>
-                <h4 class="text-lg font-medium text-gray-700 mb-2">No Thesis Found</h4>
-                <p class="text-gray-600">This student hasn't registered any thesis titles yet.</p>
+                <h4 class="text-lg font-medium text-gray-300 mb-2">No Thesis Found</h4>
+                <p class="text-gray-400">This student hasn't registered any thesis titles yet.</p>
             </div>
         `;
         return;
@@ -136,7 +136,7 @@ function renderThesisPreview(thesisList) {
     
     if (thesisList.length > 3) {
         thesisHTML += `
-            <div class="mb-4 p-3 bg-blue-50 rounded-lg text-sm text-blue-700">
+            <div class="mb-4 p-3 bg-blue-900 rounded-lg text-sm text-blue-300 border border-blue-800">
                 <i class="fas fa-info-circle mr-2"></i>
                 Showing 3 of ${thesisList.length} thesis titles. 
                 <a href="ta.html?nim=${nim}" class="font-medium underline">View all</a>
@@ -148,28 +148,28 @@ function renderThesisPreview(thesisList) {
     
     previewTheses.forEach((thesis, index) => {
         const status = thesis.status || 'Unknown';
-        let statusClass = 'bg-gray-100 text-gray-800';
+        let statusClass = 'bg-gray-700 text-gray-300 border border-gray-600';
         
-        if (status === 'Selesai') statusClass = 'bg-green-100 text-green-800';
-        else if (status === 'Proses') statusClass = 'bg-yellow-100 text-yellow-800';
+        if (status === 'Selesai') statusClass = 'bg-green-900 text-green-300 border border-green-700';
+        else if (status === 'Proses') statusClass = 'bg-yellow-900 text-yellow-300 border border-yellow-700';
         
         thesisHTML += `
-            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+            <div class="border border-gray-700 bg-gray-900 rounded-lg p-4 hover:bg-gray-800">
                 <div class="flex justify-between items-start">
                     <div class="flex-1">
-                        <h4 class="font-medium text-gray-900 mb-1">${thesis.judul || 'Untitled Thesis'}</h4>
-                        <div class="flex items-center text-sm text-gray-600 space-x-4">
+                        <h4 class="font-medium text-white mb-1">${thesis.judul || 'Untitled Thesis'}</h4>
+                        <div class="flex items-center text-sm text-gray-400 space-x-4">
                             <span><i class="far fa-calendar mr-1"></i> ${thesis.tahun_masuk || 'N/A'}</span>
                             <span class="${statusClass} px-2 py-1 rounded-full text-xs">
                                 ${status}
                             </span>
                         </div>
                         ${thesis.deskripsi ? `
-                            <p class="text-sm text-gray-700 mt-2 line-clamp-2">${thesis.deskripsi}</p>
+                            <p class="text-sm text-gray-300 mt-2 line-clamp-2">${thesis.deskripsi}</p>
                         ` : ''}
                     </div>
                     <a href="ta.html?nim=${nim}#thesis-${thesis.id_ta}" 
-                       class="ml-4 text-blue-600 hover:text-blue-800">
+                       class="ml-4 text-blue-400 hover:text-blue-300">
                        <i class="fas fa-external-link-alt"></i>
                     </a>
                 </div>

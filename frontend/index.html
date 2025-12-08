@@ -12,10 +12,10 @@
         }
         .card-hover:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
         .gradient-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
         }
         .sidebar-link {
             transition: all 0.2s ease;
@@ -26,23 +26,23 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-900 min-h-screen">
 
     <!-- Header -->
-    <header class="gradient-header text-white shadow-lg">
+    <header class="gradient-header text-white shadow-lg border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 py-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
                     <div class="bg-white p-2 rounded-lg">
-                        <i class="fas fa-graduation-cap text-2xl text-purple-600"></i>
+                        <i class="fas fa-graduation-cap text-2xl text-black"></i>
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">Student Information Center</h1>
-                        <p class="text-purple-200 text-sm">University of Mataram</p>
+                        <p class="text-gray-400 text-sm">University of Mataram</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm bg-white/20 px-3 py-1 rounded-full">
+                    <span class="text-sm bg-gray-800 px-3 py-1 rounded-full border border-gray-700">
                         <i class="fas fa-users mr-1"></i> 
                         <span id="totalStudents">Loading...</span> Students
                     </span>
@@ -57,36 +57,35 @@
         <div class="mb-8">
             <div class="flex justify-between items-center mb-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Student Directory</h2>
+                    <h2 class="text-2xl font-bold text-white">Student Directory</h2>
                 </div>
-                
             </div>
 
             <!-- Search and Filters -->
-            <div class="bg-white rounded-xl shadow p-6 mb-6">
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-gray-700">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <!-- Search -->
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Search Students</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Search Students</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
+                                <i class="fas fa-search text-gray-500"></i>
                             </div>
                             <input 
                                 id="searchInput"
                                 type="text" 
                                 placeholder="Search by name, NIM, or school..."
-                                class="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                class="pl-10 w-full p-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-white placeholder-gray-500"
                             />
                         </div>
                     </div>
 
                     <!-- Year Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Entry Year</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Entry Year</label>
                         <select 
                             id="tahunFilter"
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-white"
                         >
                             <option value="">All Years</option>
                         </select>
@@ -94,10 +93,10 @@
 
                     <!-- Sort -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Sort By</label>
                         <select 
                             id="sortSelect"
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-white"
                         >
                             <option value="">Default</option>
                             <option value="tahun_asc">Year ↑ (Oldest)</option>
@@ -110,47 +109,47 @@
 
                 <!-- Quick Stats -->
                 <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="flex items-center">
-                            <div class="bg-blue-100 p-2 rounded-lg mr-3">
-                                <i class="fas fa-user-graduate text-blue-600"></i>
+                            <div class="bg-gray-800 p-2 rounded-lg mr-3">
+                                <i class="fas fa-user-graduate text-white"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-blue-800">Total Students</p>
-                                <p class="text-xl font-bold text-blue-900" id="statsTotal">0</p>
+                                <p class="text-sm text-gray-400">Total Students</p>
+                                <p class="text-xl font-bold text-white" id="statsTotal">0</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="flex items-center">
-                            <div class="bg-green-100 p-2 rounded-lg mr-3">
-                                <i class="fas fa-file-alt text-green-600"></i>
+                            <div class="bg-gray-800 p-2 rounded-lg mr-3">
+                                <i class="fas fa-file-alt text-green-400"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-green-800">With Thesis</p>
-                                <p class="text-xl font-bold text-green-900" id="statsThesis">0</p>
+                                <p class="text-sm text-gray-400">With Thesis</p>
+                                <p class="text-xl font-bold text-white" id="statsThesis">0</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="flex items-center">
-                            <div class="bg-purple-100 p-2 rounded-lg mr-3">
-                                <i class="fas fa-school text-purple-600"></i>
+                            <div class="bg-gray-800 p-2 rounded-lg mr-3">
+                                <i class="fas fa-school text-purple-400"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-purple-800">Schools</p>
-                                <p class="text-xl font-bold text-purple-900" id="statsSchools">0</p>
+                                <p class="text-sm text-gray-400">Schools</p>
+                                <p class="text-xl font-bold text-white" id="statsSchools">0</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-orange-50 p-4 rounded-lg border border-orange-100">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="flex items-center">
-                            <div class="bg-orange-100 p-2 rounded-lg mr-3">
-                                <i class="fas fa-calendar-alt text-orange-600"></i>
+                            <div class="bg-gray-800 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-alt text-orange-400"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-orange-800">Entry Years</p>
-                                <p class="text-xl font-bold text-orange-900" id="statsYears">0</p>
+                                <p class="text-sm text-gray-400">Entry Years</p>
+                                <p class="text-xl font-bold text-white" id="statsYears">0</p>
                             </div>
                         </div>
                     </div>
@@ -162,34 +161,34 @@
         <div id="dataContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <!-- Cards -->
             <div class="col-span-full text-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p class="mt-4 text-gray-600">Loading student data...</p>
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+                <p class="mt-4 text-gray-400">Loading student data...</p>
             </div>
         </div>
 
         <!-- Pagination -->
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
             <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-600">
-                    Showing page <span id="currentPage" class="font-semibold">1</span> of <span id="totalPages" class="font-semibold">1</span>
+                <div class="text-sm text-gray-400">
+                    Showing page <span id="currentPage" class="font-semibold text-white">1</span> of <span id="totalPages" class="font-semibold text-white">1</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <button 
                         id="prevBtn" 
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                        class="px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                     >
                         <i class="fas fa-chevron-left mr-2"></i> Previous
                     </button>
                     <div class="flex space-x-1" id="pageNumbers"></div>
                     <button 
                         id="nextBtn" 
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                        class="px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                     >
                         Next <i class="fas fa-chevron-right ml-2"></i>
                     </button>
                 </div>
-                <div class="text-sm text-gray-600">
-                    <select id="pageLimit" class="border border-gray-300 rounded p-1">
+                <div class="text-sm text-gray-400">
+                    <select id="pageLimit" class="border border-gray-700 bg-gray-900 text-white rounded p-1">
                         <option value="10">10 per page</option>
                         <option value="20" selected>20 per page</option>
                         <option value="50">50 per page</option>

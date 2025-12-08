@@ -109,11 +109,11 @@ function renderData(data) {
     if (data.length === 0) {
         container.innerHTML = `
             <div class="col-span-full text-center py-12">
-                <div class="text-gray-400 mb-4">
+                <div class="text-gray-500 mb-4">
                     <i class="fas fa-user-slash text-5xl"></i>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-700 mb-2">No Students Found</h3>
-                <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+                <h3 class="text-xl font-semibold text-gray-300 mb-2">No Students Found</h3>
+                <p class="text-gray-400">Try adjusting your search or filter criteria</p>
             </div>
         `;
         return;
@@ -121,7 +121,7 @@ function renderData(data) {
 
     data.forEach(item => {
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-xl shadow card-hover border border-gray-200 overflow-hidden';
+        card.className = 'bg-gray-800 rounded-xl shadow-lg card-hover border border-gray-700 overflow-hidden';
         
         // Determine badge color based on year
         const currentYear = new Date().getFullYear();
@@ -129,9 +129,9 @@ function renderData(data) {
         const yearDiff = currentYear - studentYear;
         
         let yearBadge = '';
-        if (yearDiff === 0) yearBadge = 'bg-green-100 text-green-800';
-        else if (yearDiff <= 3) yearBadge = 'bg-blue-100 text-blue-800';
-        else yearBadge = 'bg-gray-100 text-gray-800';
+        if (yearDiff === 0) yearBadge = 'bg-green-900 text-green-300 border border-green-700';
+        else if (yearDiff <= 3) yearBadge = 'bg-blue-900 text-blue-300 border border-blue-700';
+        else yearBadge = 'bg-gray-700 text-gray-300 border border-gray-600';
 
         card.innerHTML = `
             <div class="p-6">
@@ -140,40 +140,40 @@ function renderData(data) {
                         <span class="${yearBadge} px-3 py-1 rounded-full text-xs font-semibold">
                             Batch ${item.tahun_masuk || 'N/A'}
                         </span>
-                        <h3 class="text-xl font-bold text-gray-900 mt-2">${item.nama || "Unknown"}</h3>
-                        <p class="text-gray-600">${item.nim || "No NIM"}</p>
+                        <h3 class="text-xl font-bold text-white mt-2">${item.nama || "Unknown"}</h3>
+                        <p class="text-gray-400">${item.nim || "No NIM"}</p>
                     </div>
                     <div class="text-right">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-black rounded-full flex items-center justify-center text-white font-bold text-lg border border-gray-700">
                             ${item.nama ? item.nama.charAt(0).toUpperCase() : '?'}
                         </div>
                     </div>
                 </div>
                 
                 <div class="space-y-3 mb-6">
-                    <div class="flex items-center text-gray-700">
-                        <i class="fas fa-school text-gray-400 mr-3 w-5"></i>
+                    <div class="flex items-center text-gray-300">
+                        <i class="fas fa-school text-gray-500 mr-3 w-5"></i>
                         <span class="text-sm">${item.nama_sekolah || "Not specified"}</span>
                     </div>
-                    <div class="flex items-center text-gray-700">
-                        <i class="fas fa-book text-gray-400 mr-3 w-5"></i>
+                    <div class="flex items-center text-gray-300">
+                        <i class="fas fa-book text-gray-500 mr-3 w-5"></i>
                         <span class="text-sm">
                             ${item.jumlah_ta > 0 ? `${item.jumlah_ta} Thesis Titles` : 'No thesis data'}
                         </span>
                     </div>
-                    <div class="flex items-center text-gray-700">
-                        <i class="fas fa-id-card text-gray-400 mr-3 w-5"></i>
+                    <div class="flex items-center text-gray-300">
+                        <i class="fas fa-id-card text-gray-500 mr-3 w-5"></i>
                         <span class="text-sm font-mono">${item.kode_sekolah || 'No school code'}</span>
                     </div>
                 </div>
                 
-                <div class="flex space-x-2 pt-4 border-t border-gray-100">
+                <div class="flex space-x-2 pt-4 border-t border-gray-700">
                     <a href="detail.html?nim=${item.nim}" 
-                       class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-lg text-sm font-medium transition">
+                       class="flex-1 px-4 py-2 bg-gray-900 hover:bg-black text-white text-center rounded-lg text-sm font-medium transition border border-gray-700">
                        <i class="fas fa-user-circle mr-2"></i>Profile
                     </a>
                     <a href="ta.html?nim=${item.nim}" 
-                       class="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-center rounded-lg text-sm font-medium transition">
+                       class="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-center rounded-lg text-sm font-medium transition">
                        <i class="fas fa-book-open mr-2"></i>Thesis
                     </a>
                 </div>
@@ -208,7 +208,7 @@ function updatePagination(page, total) {
     
     for (let i = startPage; i <= endPage; i++) {
         const pageBtn = document.createElement('button');
-        pageBtn.className = `px-3 py-1 rounded ${i === page ? 'bg-blue-600 text-white' : 'border border-gray-300 hover:bg-gray-50'}`;
+        pageBtn.className = `px-3 py-1 rounded ${i === page ? 'bg-white text-black' : 'border border-gray-700 bg-gray-900 text-white hover:bg-gray-700'}`;
         pageBtn.textContent = i;
         pageBtn.onclick = () => {
             currentPage = i;
@@ -244,6 +244,21 @@ async function updateStats() {
         statsYears.textContent = "0";
         totalStudents.textContent = "0";
     }
+}
+
+// Show error state
+function showError(message) {
+    container.innerHTML = `
+        <div class="col-span-full">
+            <div class="bg-red-900 border border-red-700 rounded-xl p-8 text-center">
+                <div class="text-red-400 mb-4">
+                    <i class="fas fa-exclamation-triangle text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-red-200 mb-2">Error</h3>
+                <p class="text-red-300">${message}</p>
+            </div>
+        </div>
+    `;
 }
 
 // Export to CSV function
